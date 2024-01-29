@@ -1,6 +1,12 @@
 const express = require('express');
-
+const bodyParser = require('body-parser');
+const blogRoutes = require('./routes/blog');
 const app = express();
-const router = express.router();
 
-router.post('/api/create')
+app.use(bodyParser.json());
+app.use('/api',blogRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
