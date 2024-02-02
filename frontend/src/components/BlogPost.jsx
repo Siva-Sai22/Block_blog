@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import "../markdownStyles.css";
 
 function BlogPost({ postId }) {
   const [blogData, setBlogData] = useState(null);
   const [loading, setLoading] = useState(true);
+  let dataUrl = "";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +30,31 @@ function BlogPost({ postId }) {
       fetchData();
     }
   }, [postId]);
+  if (blogData) {
+    const blob = new Blob([new Uint8Array(blogData.thumbnail.buffer.data)], {
+      type: blogData.thumbnail.mimetype,
+    });
+    dataUrl = URL.createObjectURL(blob);
+  }
 
   return (
     <>
-      {loading && <p>Loading...</p>}
-      {!loading && !blogData && <p>Not found</p>}
-      {!loading && blogData && <p>{blogData.content}</p>}
+      {loading && <p className="m-4">Loading...</p>}
+      {blogData && (
+        <div className="mx-auto my-10 w-[min(100vw,930px)]">
+          <h1 className="px-4 text-center text-4xl font-bold">
+            {blogData.title}
+          </h1>
+          <img
+            src={dataUrl}
+            alt="Thumbnail"
+            className="mx-auto mt-4 overflow-hidden rounded-lg"
+          />
+          <div className="mt-4 text-lg markdown-content">
+            <ReactMarkdown>{blogData.content}</ReactMarkdown>
+          </div>
+        </div>
+      )}
     </>
   );
 }

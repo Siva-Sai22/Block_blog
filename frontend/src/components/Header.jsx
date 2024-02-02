@@ -1,9 +1,11 @@
 import logo from "../assets/logo.png"
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [isClicked, setIsClicked] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setIsClicked(!isClicked);
@@ -33,11 +35,12 @@ function Header() {
             Inbox
           </div>
         </div>
-        <Link to={"create"}>
-          <button className="mr-4 rounded-lg bg-blue-500 px-4 py-1  text-white">
-            Create
-          </button>
-        </Link>
+        <button
+          onClick={()=>navigate(`/create`)}
+          className="mr-4 rounded-lg bg-blue-500 px-4 py-1  text-white"
+        >
+          Create
+        </button>
       </div>
       <hr />
     </>
