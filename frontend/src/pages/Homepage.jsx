@@ -5,8 +5,8 @@ import "../index.css";
 function Homepage() {
   return (
     <>
-      <Header></Header>
-      <Cards></Cards>
+      <Header/>
+      <Cards/>
     </>
   );
 }
