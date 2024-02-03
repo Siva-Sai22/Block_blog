@@ -1,6 +1,8 @@
 import { useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Resizer from "react-image-file-resizer";
 
 function BlogForm() {
   const [value, setValue] = useState("");
@@ -9,26 +11,38 @@ function BlogForm() {
   const [thumbnail, setThumbnail] = useState(null);
   const navigate = useNavigate();
 
-  const handleThumbnailChange = (e) => {
+  const handleThumbnailChange = async (e) => {
     const file = e.target.files[0];
-    setThumbnail(file);
+    try {
+      Resizer.imageFileResizer(file,930,465,"JPEG",100,0,
+        (uri) => {
+          setThumbnail(uri);
+        },"file",300,300,);
+    } catch (error) {
+      console.error("Error resizing image:", error);
+    }
   };
 
   const sendBlog = async () => {
     const formData = new FormData();
+
     formData.append("thumbnail", thumbnail);
     formData.append("content", value);
-    formData.append("title",title);
+    formData.append("title", title);
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/blog", {
-        method: "POST",
-        body: formData,
+      const response = await axios({
+        url: `http://localhost:3000/api/blog`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        method: "post",
+        data: formData,
       });
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log(responseData);
+
+      if (response.status === 200) {
+        const responseData = response.data;
         navigate(`/blog/${responseData.IpfsHash}`);
       } else {
         console.log("error");
@@ -64,9 +78,9 @@ function BlogForm() {
       <br />
 
       <label htmlFor="thumbnail" className="ml-4 mr-2 text-xl">
-        Thumbnail:
+        Cover Image:
       </label>
-      <div className="relative inline-block mt-4">
+      <div className="relative mt-4 inline-block">
         <input
           type="file"
           id="thumbnail"
@@ -80,7 +94,9 @@ function BlogForm() {
         >
           Choose File
         </label>
-        <span className="ml-4">{!thumbnail ? "Upload a file":`Uploaded.`}</span>
+        <span className="ml-4 text-gray-500">
+          {!thumbnail ? "Upload a file" : `Uploaded.`}
+        </span>
       </div>
 
       <div className="m-4 h-[700px]">
@@ -91,3 +107,4 @@ function BlogForm() {
 }
 
 export default BlogForm;
+

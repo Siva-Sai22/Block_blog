@@ -7,25 +7,42 @@ const router = express.Router();
 const pinata = new pinataSDK(process.env.API_KEY, process.env.API_SECRET);
 const gateway = process.env.GATEWAY;
 
-router.get('/blog', async (req, res) => {
-    res.status(200).json({ message: 'Welcome to the blog!' });
+router.get('/blogs', async (req, res) => {
+    const posts = [];
+    for await (const item of pinata.getFilesByCount({ status: 'pinned' }, 10)) {
+        if(!item) continue;
+        try {
+            const response = await fetch(
+                `http://localhost:3000/api/blog/${item.ipfs_pin_hash}`,
+            );
+            if (response.ok) {
+                const json = await response.json();
+                posts.push({ title:json.title, thumbnail: json.thumbnail, ipfs_hash: item.ipfs_pin_hash});
+            } else {
+                console.error("error");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    res.send(posts);
 });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 router.post('/blog', upload.single("thumbnail"), async (req, res) => {
-    try{
+    try {
         const thumbnail = req.file.buffer;
-        const {content, title} = req.body;
-        const result = await pinata.pinJSONToIPFS({content,title,thumbnail});
+        const { content, title } = req.body;
+        const result = await pinata.pinJSONToIPFS({ content, title, thumbnail });
         res.status(200).json(result);
-    }catch(error){
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-router.get('/blog/:hash',async (req, res) => {
+router.get('/blog/:hash', async (req, res) => {
     const { hash } = req.params;
     const url = `${gateway}/${hash}`;
     try {
@@ -41,7 +58,7 @@ router.get('/blog/:hash',async (req, res) => {
     }
 });
 
-router.delete('/blog/:hash', async (req, res) => { 
+router.delete('/blog/:hash', async (req, res) => {
     const { hash } = req.params;
     try {
         const result = await pinata.unpin(hash);

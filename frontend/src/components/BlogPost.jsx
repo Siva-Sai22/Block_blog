@@ -31,9 +31,7 @@ function BlogPost({ postId }) {
     }
   }, [postId]);
   if (blogData) {
-    const blob = new Blob([new Uint8Array(blogData.thumbnail.buffer.data)], {
-      type: blogData.thumbnail.mimetype,
-    });
+    const blob = new Blob([new Uint8Array(blogData.thumbnail.data)]);
     dataUrl = URL.createObjectURL(blob);
   }
 
@@ -42,15 +40,15 @@ function BlogPost({ postId }) {
       {loading && <p className="m-4">Loading...</p>}
       {blogData && (
         <div className="mx-auto my-10 w-[min(100vw,930px)]">
-          <h1 className="px-4 text-center text-4xl font-bold">
-            {blogData.title}
-          </h1>
           <img
             src={dataUrl}
-            alt="Thumbnail"
-            className="mx-auto mt-4 overflow-hidden rounded-lg"
+            alt="Cover Image"
+            className="mx-auto overflow-hidden rounded-lg w-full"
           />
-          <div className="mt-4 text-lg markdown-content">
+          <h1 className="mt-4 text-center px-4 text-4xl font-bold">
+            {blogData.title}
+          </h1>
+          <div className="markdown-content mt-4 text-lg">
             <ReactMarkdown>{blogData.content}</ReactMarkdown>
           </div>
         </div>
