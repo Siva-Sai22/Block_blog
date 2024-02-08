@@ -1,14 +1,24 @@
 import logo from "../assets/logo.png"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useWeb3js } from "../hooks/useWeb3";
 
 function Header() {
-  const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    setIsClicked(!isClicked);
+  const {account, connectMetamask} = useWeb3js();
+
+  useEffect(() => {
+    if (!account) {
+      connectMetamask();
+    }
+  }, [account]);
+
+  const handleConnect = () => {
+    if (!account) {
+      connectMetamask();
+    }
   };
   return (
     <>
@@ -19,24 +29,20 @@ function Header() {
         </div>
         <div className="flex gap-4">
           <Link to={"/"}>
-            <div
-              onClick={handleClick}
-              href=""
-              className={`cursor-pointer ${!isClicked ? "text-blue-500" : "text-black"}`}
-            >
+            <div href="" className="cursor-pointer text-blue-500">
               Explore
             </div>
           </Link>
           <div
-            onClick={handleClick}
             href=""
-            className={`cursor-pointer ${isClicked ? "text-blue-500" : "text-black"}`}
+            className="cursor-pointer text-black"
+            onClick={handleConnect}
           >
-            Inbox
+            {account ? `${account.substring(0, 6)}...` : "Connect"}
           </div>
         </div>
         <button
-          onClick={()=>navigate(`/create`)}
+          onClick={() => navigate(`/create`)}
           className="mr-4 rounded-lg bg-blue-500 px-4 py-1  text-white"
         >
           Create

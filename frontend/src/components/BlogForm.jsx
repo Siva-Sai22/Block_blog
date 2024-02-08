@@ -3,6 +3,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Resizer from "react-image-file-resizer";
+import { useWeb3js } from "../hooks/useWeb3";
 
 function BlogForm() {
   const [value, setValue] = useState("");
@@ -10,6 +11,8 @@ function BlogForm() {
   const [loading, setLoading] = useState(false);
   const [thumbnail, setThumbnail] = useState(null);
   const navigate = useNavigate();
+
+  const {createBlog} = useWeb3js();
 
   const handleThumbnailChange = async (e) => {
     const file = e.target.files[0];
