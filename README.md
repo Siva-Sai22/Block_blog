@@ -1,42 +1,37 @@
-# First Draft
- 
-Functional Requirements: 
+# Block Blog (A Decentralised Blogging Platform)
 
-1. View, publish blog posts
-    a. Implement a frontend.
-    b. Store data on IPFS.
-    c. Implement routing system for different blog posts.
-    d. Implement a text editor to write the blog post while publishing.
+## Description
 
-2. Users should be allowed to tip the publishers.
-    a. Integrate metamask wallet.
-    b. Implement smart contracts for tipping.
+This project is a full-stack JavaScript application that uses Solidity smart contracts on the backend and a React frontend. The application allows users to create and view blog posts as non-fungible tokens (NFTs).
 
-3. Each blog post should be an NFT
-    a. Implement erc721 smart contracts.
-    b. Users should be able to buy these blog posts.
+## Structure
 
-4. Users should be able to add comments and upvote:
-    a. A form for comments and store in IPFS.
-    b. Like and Dislike button.
+The project is divided into three main parts:
 
-Visual Requirements: 
+1. `backend/`: This directory contains the server-side JavaScript code, including the Express routes for the blog API.
 
-1. Implement a website design like mirror.xyz:
+2. `contracts/`: This directory contains the Solidity smart contracts for the BlogNFT.
 
-2. Seperate page to publish blog posts:
+3. `frontend/`: This directory contains the client-side React code, including components for the blog form, blog post, cards, and header.
 
-3. A page for user details and their owned blog posts with analytics:
+## Setup
 
-# Second Draft
+To set up the project, follow these steps:
 
-Functional Requirements:
+1. Install dependencies: Run `npm install` in the root directory, as well as in the `backend/` and `frontend/` directories.
 
-1. Put ads on the blogs for allowing nft owners to get revenue:
-    a. Creator should always get a percentage.
+2. Start the backend server: Navigate to the `backend/` directory and run `node index.js`.
 
-2. Set dynamic pricing on these nfts:
+3. Start the frontend server: Navigate to the `frontend/` directory and run `npm start`.
 
-3. Subscription model for early access:
+## Usage
 
-4. Owner should approve for buying the nft:
+To use the application, navigate to the homepage in your web browser. From there, you can create new blog posts and view existing ones.
+
+## Contributing
+
+Contributions are welcome. Please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License.
