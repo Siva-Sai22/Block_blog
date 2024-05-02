@@ -22,7 +22,7 @@ To set up the project, follow these steps:
 
 2. Start the backend server: Navigate to the `backend/` directory and run `node index.js`.
 
-3. Start the frontend server: Navigate to the `frontend/` directory and run `npm start`.
+3. Start the frontend server: Navigate to the `frontend/` directory and run `npm run dev`.
 
 ## Usage
 
